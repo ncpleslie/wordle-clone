@@ -1,7 +1,7 @@
 .character-box {
-    @apply border-solid border-2 border-black w-fit h-fit;
+  @apply grid justify-center items-center border-solid border-2 border-black w-[4.2rem] h-[4.2rem];
 
-    .character-box__text {
-        @apply font-black text-4xl p-4;
-    }
+  .character-box__text {
+    @apply font-black text-4xl;
+  }
 }
