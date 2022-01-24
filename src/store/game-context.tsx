@@ -12,7 +12,7 @@ const GameCtx = React.createContext(
 );
 
 export const GameContextProvider = (props: ChildrenProps) => {
-  const word = "lever";
+  const word = "LEVER";
   const tries = 6;
 
   const keyboardConfig = KeyboardConfig["en-US"].map(
