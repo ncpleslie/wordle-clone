@@ -1,43 +1,54 @@
+import { useContext, Fragment } from "react";
+import GameCtx from "../../store/game-context";
 import Key from "../UI/Key/Key";
+import "./Keyboard.scss";
 
 const Keyboard = () => {
-    const handleOnKeyboardKeyClick = (key: string): void => {
-        console.log(key);
-    }
+  const ctx = useContext(GameCtx);
 
-    const keyboardState: { [key: string]: any } = {
-        'Q': {
-            character: 'Q',
-            order: 0,
-            row: 0,
-            usedLocationKnown: true,
-            usedLocationUnknown: false
-        }
-    }
+  const handleOnKeyboardKeyClick = (key: string): void => {
+    ctx.onKeyClicked(key);
+  };
 
+  const keyboardState = ctx.keyboard.state;
 
-    return (
-        <div>
-            {
-                Object.keys(keyboardState).map((keyName: string, i: number) =>
-                    <Key
-                        character={keyName}
-                        usedLocationKnown={keyboardState[keyName].usedLocationKnown}
-                        usedLocationUnknown={keyboardState[keyName].usedLocationUnknown}
-                        onKeyClicked={handleOnKeyboardKeyClick}
-                        key={i}
-                    />
-                )
-            }
-            <div className="flex flex-row gap-1">
-                <Key character={'Q'} usedLocationKnown={false} usedLocationUnknown={false} onKeyClicked={handleOnKeyboardKeyClick} />
-                <Key character={'W'} usedLocationKnown={false} usedLocationUnknown={false} onKeyClicked={handleOnKeyboardKeyClick} />
-                <Key character={'E'} usedLocationKnown={false} usedLocationUnknown={false} onKeyClicked={handleOnKeyboardKeyClick} />
-                <Key character={'R'} usedLocationKnown={false} usedLocationUnknown={false} onKeyClicked={handleOnKeyboardKeyClick} />
-                <Key character={'T'} usedLocationKnown={false} usedLocationUnknown={false} onKeyClicked={handleOnKeyboardKeyClick} />
-            </div>
-        </div>
-    );
-}
+  let keyboardRowNumber = 0;
+
+  return (
+    <div>
+      <div className="keyboard">
+        {Object.keys(keyboardState).map((keyName: string) => {
+          if (keyboardState[keyName].row !== keyboardRowNumber) {
+            keyboardRowNumber = keyboardState[keyName].row;
+
+            return (
+              <Fragment key={keyName}>
+                <div className="keyboard__break"></div>
+                <Key
+                  character={keyName}
+                  usedLocationKnown={keyboardState[keyName].usedLocationKnown}
+                  usedLocationUnknown={
+                    keyboardState[keyName].usedLocationUnknown
+                  }
+                  onKeyClicked={handleOnKeyboardKeyClick}
+                />
+              </Fragment>
+            );
+          }
+
+          return (
+            <Key
+              character={keyName}
+              usedLocationKnown={keyboardState[keyName].usedLocationKnown}
+              usedLocationUnknown={keyboardState[keyName].usedLocationUnknown}
+              onKeyClicked={handleOnKeyboardKeyClick}
+              key={keyName}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 export default Keyboard;

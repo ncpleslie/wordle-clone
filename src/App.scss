@@ -1,3 +1,7 @@
 .App {
   @apply grid justify-center;
+
+  .game {
+    @apply flex flex-col gap-5 m-10 w-[350px];
+  }
 }

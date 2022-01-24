@@ -1,0 +1,7 @@
+.keyboard {
+  @apply flex flex-row flex-wrap justify-center gap-1;
+
+  .keyboard__break {
+    @apply basis-full w-full h-full;
+  }
+}
