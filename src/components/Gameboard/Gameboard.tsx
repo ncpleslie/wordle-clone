@@ -1,26 +1,19 @@
 import "./Gameboard.scss";
 import CharacterBox from "../UI/CharacterBox/CharacterBox";
-import { useContext, useState } from "react";
-import GameCtx from "../../store/game-context";
+import { useState } from "react";
+import { observer } from "mobx-react-lite";
+import store from "../../store/game-store";
 
-const Gameboard = () => {
-  const ctx = useContext(GameCtx);
-
-  const [gridColStyle] = useState(`grid-cols-${ctx.game.options.word.length}`);
+const Gameboard = observer(() => {
+  const [gridColStyle] = useState(`grid-cols-${store.getWordLength()}`);
 
   return (
-    <div
-      className={`gameboard grid-cols-5 ${
-        ctx.game.options.word && gridColStyle
-      }`}
-    >
-      {[...Array(ctx.game.options.word.length * ctx.game.options.tries)].map(
-        (_, i) => (
-          <CharacterBox key={i} character={ctx.game.guesses[i]} />
-        )
-      )}
+    <div className={`gameboard grid-cols-5 ${gridColStyle}`}>
+      {[...Array(store.getWordLength() * store.getTotalTries())].map((_, i) => (
+        <CharacterBox key={i} character={store.guesses[i]} />
+      ))}
     </div>
   );
-};
+});
 
 export default Gameboard;

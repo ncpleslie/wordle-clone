@@ -1,34 +1,33 @@
-import { useContext, Fragment } from "react";
-import GameCtx from "../../store/game-context";
+import { Fragment } from "react";
 import Key from "../UI/Key/Key";
 import "./Keyboard.scss";
+import { observer } from "mobx-react-lite";
+import store from "../../store/game-store";
 
-const Keyboard = () => {
-  const ctx = useContext(GameCtx);
-
+const Keyboard = observer(() => {
   const handleOnKeyboardKeyClick = (key: string): void => {
-    ctx.onKeyClicked(key);
+    store.onKeyClicked(key);
   };
-
-  const keyboardState = ctx.keyboard.state;
 
   let keyboardRowNumber = 0;
 
   return (
     <div>
       <div className="keyboard">
-        {Object.keys(keyboardState).map((keyName: string) => {
-          if (keyboardState[keyName].row !== keyboardRowNumber) {
-            keyboardRowNumber = keyboardState[keyName].row;
+        {Object.keys(store.keyboardState).map((keyName: string) => {
+          if (store.keyboardState[keyName].row !== keyboardRowNumber) {
+            keyboardRowNumber = store.keyboardState[keyName].row;
 
             return (
               <Fragment key={keyName}>
                 <div className="keyboard__break"></div>
                 <Key
                   character={keyName}
-                  usedLocationKnown={keyboardState[keyName].usedLocationKnown}
+                  usedLocationKnown={
+                    store.keyboardState[keyName].usedLocationKnown
+                  }
                   usedLocationUnknown={
-                    keyboardState[keyName].usedLocationUnknown
+                    store.keyboardState[keyName].usedLocationUnknown
                   }
                   onKeyClicked={handleOnKeyboardKeyClick}
                 />
@@ -39,8 +38,10 @@ const Keyboard = () => {
           return (
             <Key
               character={keyName}
-              usedLocationKnown={keyboardState[keyName].usedLocationKnown}
-              usedLocationUnknown={keyboardState[keyName].usedLocationUnknown}
+              usedLocationKnown={store.keyboardState[keyName].usedLocationKnown}
+              usedLocationUnknown={
+                store.keyboardState[keyName].usedLocationUnknown
+              }
               onKeyClicked={handleOnKeyboardKeyClick}
               key={keyName}
             />
@@ -49,6 +50,6 @@ const Keyboard = () => {
       </div>
     </div>
   );
-};
+});
 
 export default Keyboard;
