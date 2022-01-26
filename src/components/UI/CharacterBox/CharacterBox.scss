@@ -4,4 +4,16 @@
   .character-box__text {
     @apply font-black text-4xl;
   }
+
+  &.not-used {
+    @apply bg-gray-500;
+  }
+
+  &.incorrect-location {
+    @apply bg-yellow-400;
+  }
+
+  &.correct-location {
+    @apply bg-green-500;
+  }
 }

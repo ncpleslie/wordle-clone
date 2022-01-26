@@ -5,6 +5,10 @@
     @apply py-5 px-[10px] font-bold text-xs;
   }
 
+  &.not-used {
+    @apply bg-gray-500 active:bg-gray-700 hover:bg-gray-600;
+  }
+
   &.used-and-unknown {
     @apply bg-yellow-300 active:bg-yellow-500 hover:bg-yellow-400;
   }

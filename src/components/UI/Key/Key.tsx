@@ -10,7 +10,7 @@ const Key = (props: KeyProps) => {
     <button
       className={`key ${props.usedLocationUnknown ? "used-and-unknown" : ""} ${
         props.usedLocationKnown ? "used-and-known" : ""
-      }`}
+      } ${props.notUsed ? "not-used" : ""}`}
       onClick={handleOnClick}
     >
       <p className="key__text">{props.character.toUpperCase()}</p>

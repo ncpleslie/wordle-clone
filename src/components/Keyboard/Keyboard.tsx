@@ -15,27 +15,7 @@ const Keyboard = observer(() => {
     <div>
       <div className="keyboard">
         {Object.keys(store.keyboardState).map((keyName: string) => {
-          if (store.keyboardState[keyName].row !== keyboardRowNumber) {
-            keyboardRowNumber = store.keyboardState[keyName].row;
-
-            return (
-              <Fragment key={keyName}>
-                <div className="keyboard__break"></div>
-                <Key
-                  character={keyName}
-                  usedLocationKnown={
-                    store.keyboardState[keyName].usedLocationKnown
-                  }
-                  usedLocationUnknown={
-                    store.keyboardState[keyName].usedLocationUnknown
-                  }
-                  onKeyClicked={handleOnKeyboardKeyClick}
-                />
-              </Fragment>
-            );
-          }
-
-          return (
+          const key = (
             <Key
               character={keyName}
               usedLocationKnown={store.keyboardState[keyName].usedLocationKnown}
@@ -43,9 +23,23 @@ const Keyboard = observer(() => {
                 store.keyboardState[keyName].usedLocationUnknown
               }
               onKeyClicked={handleOnKeyboardKeyClick}
+              notUsed={store.keyboardState[keyName].notUsed}
               key={keyName}
             />
           );
+
+          if (store.keyboardState[keyName].row !== keyboardRowNumber) {
+            keyboardRowNumber = store.keyboardState[keyName].row;
+
+            return (
+              <Fragment key={keyName}>
+                <div className="keyboard__break"></div>
+                {key}
+              </Fragment>
+            );
+          }
+
+          return key;
         })}
       </div>
     </div>

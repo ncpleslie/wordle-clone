@@ -1,89 +1,80 @@
 import { makeAutoObservable } from "mobx";
 import { KeyboardEventKey } from "../enums/keyboard-event-key.enum";
+import GameOptions from "../models/game-options.model";
+import GuessState from "../models/guess-state.model";
 import KeyState from "../models/key-state.model";
+import GameService from "../services/game.service";
 import keyboardImporter from "../utils/keyboard-importer";
 
 class GameStore {
-  private word = "LEVER";
-  private tries = 6;
-  private lang = "en-US";
-
-  constructor() {
+  constructor(game: GameService) {
     makeAutoObservable(this);
-    this.keyboardState = this.generateKeyboard(this.lang);
+    this.keyboardState = this.generateKeyboard(game.options.lang);
     this.guesses = [];
+    this.game = game;
   }
 
   public keyboardState: { [key: string]: KeyState };
-  public guesses: string[];
+  public guesses: GuessState[];
+  public game: GameService;
 
   public getWordLength(): number {
-    return this.word.length;
+    return this.game.options.word.length;
   }
 
   public getTotalTries(): number {
-    return this.tries;
+    return this.game.options.tries;
   }
 
   public onKeyClicked(key: string): void {
     if (key === KeyboardEventKey.Enter) {
-      this.submit();
+      this.game.submit();
+      this.updateGuessesState();
+
+      this.guesses.forEach((guess: GuessState) => {
+        if (guess.usedLocationCorrect) {
+          this.setKeyLocationKnown(guess.character);
+        }
+
+        if (guess.usedLocationIncorrect) {
+          this.setKeyLocationUnknown(guess.character);
+        }
+
+        if (guess.notUsed) {
+          this.setKeyNotUsed(guess.character);
+        }
+      });
+
+      this.updateKeyboardState();
 
       return;
     }
 
     if (key === KeyboardEventKey.Backspace) {
-      this.undo();
+      this.game.undo();
+      this.updateGuessesState();
 
       return;
     }
 
-    this.addGuess(key);
-    this.setKeyLocationKnown(key);
-  }
-
-  private addGuess(guess: string): void {
-    if (this.guesses.length >= this.word.length) {
-      return;
-    }
-
-    this.guesses.push(guess);
-    this.updateGuessesState();
-  }
-
-  private submit(): void {
-    const wordLength = this.word.length;
-    const guessesLength = this.guesses.length;
-
-    if (guessesLength !== 0 && guessesLength % wordLength === 0) {
-      const row = guessesLength / wordLength - 1;
-      const start = row * wordLength;
-      const end = wordLength * row + start || wordLength;
-      const currentGuess = this.guesses.slice(start, end).join("");
-
-      if (currentGuess === this.word) {
-        console.log("winner");
-      }
-    }
-  }
-
-  private undo(): void {
-    this.guesses.pop();
+    this.game.addGuess(key);
     this.updateGuessesState();
   }
 
   private updateGuessesState(): void {
-    this.guesses = this.guesses.slice();
+    this.guesses = this.game.getGuesses();
+  }
+
+  private setKeyNotUsed(key: string): void {
+    this.keyboardState[key].notUsed = true;
   }
 
   private setKeyLocationKnown(key: string): void {
     this.keyboardState[key].usedLocationKnown = true;
-    this.updateKeyboardState();
   }
 
   private setKeyLocationUnknown(key: string): void {
     this.keyboardState[key].usedLocationUnknown = true;
-    this.updateKeyboardState();
   }
 
   private updateKeyboardState(): void {
@@ -94,13 +85,16 @@ class GameStore {
     const keyboard = keyboardImporter(lang);
 
     return keyboard?.reduce<{ [key: string]: KeyState }>((acc, curr) => {
-      acc[curr.character] = curr;
+      acc[curr.character.toUpperCase()] = curr;
 
       return acc;
     }, {});
   }
 }
 
-const store = new GameStore();
+const gameOptions = new GameOptions("ABCDE", 6);
+const gameService = new GameService(gameOptions);
+
+const store = new GameStore(gameService);
 
 export default store;

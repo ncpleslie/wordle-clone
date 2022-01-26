@@ -5,6 +5,7 @@ export default class KeyState {
     this.row = row;
     this.usedLocationKnown = false;
     this.usedLocationUnknown = false;
+    this.notUsed = false;
   }
 
   public character: string;
@@ -12,4 +13,5 @@ export default class KeyState {
   public row: number;
   public usedLocationKnown: boolean;
   public usedLocationUnknown: boolean;
+  public notUsed: boolean;
 }
