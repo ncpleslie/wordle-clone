@@ -16,4 +16,8 @@
   &.correct-location {
     @apply bg-green-500;
   }
+
+  &.invalid {
+    @apply border-red-300;
+  }
 }

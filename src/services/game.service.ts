@@ -1,5 +1,6 @@
 import GameOptions from "../models/game-options.model";
 import GuessState from "../models/guess-state.model";
+import { isWord } from "../utils/dictionary.utils";
 
 export default class GameService {
   private row = 0;
@@ -32,6 +33,18 @@ export default class GameService {
       return;
     }
 
+    const word = this.guesses[this.row].reduce(
+      (acc, curr) => `${acc}${curr.character}`,
+      ""
+    );
+    if (!isWord(word)) {
+      for (let i = 0; i < guessesLength; i++) {
+        this.guesses[this.row][i].invalid = true;
+      }
+
+      return;
+    }
+
     for (let i = 0; i < guessesLength; i++) {
       const currentGuess = this.guesses[this.row][i].character;
       const wordArray = this.options.word.split("");
@@ -58,6 +71,6 @@ export default class GameService {
   }
 
   public undo(): void {
-    this.guesses.pop();
+    this.guesses[this.row].pop();
   }
 }
