@@ -1,8 +1,9 @@
+import GameInterface from "../interfaces/game.interface";
 import GameOptions from "../models/game-options.model";
 import GuessState from "../models/guess-state.model";
-import { isWord } from "../utils/dictionary.utils";
+import HelperUtil from "../utils/helper.util";
 
-export default class GameService {
+export default class GameService implements GameInterface {
   private row = 0;
 
   constructor(options: GameOptions) {
@@ -10,12 +11,9 @@ export default class GameService {
     this.guesses = [...Array(this.options.tries)].map(() => Array(0));
   }
 
-  private guesses: GuessState[][];
-  public options: GameOptions;
+  public guesses: GuessState[][];
 
-  public getGuesses(): GuessState[] {
-    return this.guesses.flat();
-  }
+  public options: GameOptions;
 
   public addGuess(guess: string): void {
     if (this.guesses[this.row].length >= this.options.word.length) {
@@ -37,7 +35,7 @@ export default class GameService {
       (acc, curr) => `${acc}${curr.character}`,
       ""
     );
-    if (!isWord(word)) {
+    if (!HelperUtil.isWord(word, this.options.lang)) {
       for (let i = 0; i < guessesLength; i++) {
         this.guesses[this.row][i].invalid = true;
       }
