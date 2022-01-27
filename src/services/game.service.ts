@@ -1,6 +1,7 @@
 import GameInterface from "../interfaces/game.interface";
 import GameOptions from "../models/game-options.model";
 import GuessState from "../models/guess-state.model";
+import SubmitResponse from "../models/submit-response.model";
 import HelperUtil from "../utils/helper.util";
 
 export default class GameService implements GameInterface {
@@ -23,7 +24,7 @@ export default class GameService implements GameInterface {
     this.guesses[this.row].push(new GuessState(guess));
   }
 
-  public submit(): void {
+  public submit(): SubmitResponse | void {
     const wordLength = this.options.word.length;
     const guessesLength = this.guesses[this.row].length;
 
@@ -40,7 +41,7 @@ export default class GameService implements GameInterface {
         this.guesses[this.row][i].invalid = true;
       }
 
-      return;
+      return SubmitResponse.forNotAWord();
     }
 
     for (let i = 0; i < guessesLength; i++) {

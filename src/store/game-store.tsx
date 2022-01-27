@@ -18,7 +18,7 @@ class GameStore {
   constructor(game: GameInterface) {
     makeAutoObservable(this);
 
-    this.keyboardState = this.generateKeyboard(game.options.lang);
+    this.keyboard = this.generateKeyboard(game.options.lang);
     this.guesses = [];
     this.game = game;
   }
@@ -36,7 +36,17 @@ class GameStore {
   /**
    * The state of the keyboard.
    */
-  public keyboardState: { [key: string]: KeyState };
+  public keyboard: { [key: string]: KeyState };
+
+  /**
+   * The message to show in a modal.
+   */
+  public modalMessage = "";
+
+  /**
+   * The modal state.
+   */
+  public showModal = false;
 
   /**
    * Get a guess from the array of guesses, by index.
@@ -74,7 +84,12 @@ class GameStore {
    */
   public onKeyClicked(key: string): void {
     if (key === KeyboardEventKey.Enter) {
-      this.game.submit();
+      const submitResponse = this.game.submit();
+
+      if (submitResponse?.error) {
+        this.displayModal(submitResponse.error);
+      }
+
       this.updateGuessesState();
 
       this.guesses.forEach((guess: GuessState) => {
@@ -127,7 +142,7 @@ class GameStore {
    * @param key The key to set.
    */
   private setKeyLocationKnown(key: string): void {
-    this.keyboardState[key].usedLocationKnown = true;
+    this.keyboard[key].usedLocationKnown = true;
   }
 
   /**
@@ -135,7 +150,7 @@ class GameStore {
    * @param key The key to set.
    */
   private setKeyLocationUnknown(key: string): void {
-    this.keyboardState[key].usedLocationUnknown = true;
+    this.keyboard[key].usedLocationUnknown = true;
   }
 
   /**
@@ -143,7 +158,20 @@ class GameStore {
    * @param key The key to set.
    */
   private setKeyNotUsed(key: string): void {
-    this.keyboardState[key].notUsed = true;
+    this.keyboard[key].notUsed = true;
+  }
+
+  /**
+   * Shows a modal.
+   * @param message The message to display.
+   */
+  private displayModal(message: string, timeoutInMs = 8000): void {
+    this.showModal = true;
+    this.modalMessage = message;
+
+    if (this.showModal) {
+      setTimeout(() => (this.showModal = false), timeoutInMs);
+    }
   }
 
   /**
@@ -157,7 +185,7 @@ class GameStore {
    * Update the keyboard state so MobX can inform observers.
    */
   private updateKeyboardState(): void {
-    this.keyboardState = { ...this.keyboardState };
+    this.keyboard = { ...this.keyboard };
   }
 }
 

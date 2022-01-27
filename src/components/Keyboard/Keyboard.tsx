@@ -14,23 +14,21 @@ const Keyboard = observer(() => {
   return (
     <div>
       <div className="keyboard">
-        {Object.keys(store.keyboardState).map((keyName: string) => {
+        {Object.keys(store.keyboard).map((keyName: string) => {
           const key = (
             <Key
               character={keyName}
-              usedLocationKnown={store.keyboardState[keyName].usedLocationKnown}
-              usedLocationUnknown={
-                store.keyboardState[keyName].usedLocationUnknown
-              }
+              usedLocationKnown={store.keyboard[keyName].usedLocationKnown}
+              usedLocationUnknown={store.keyboard[keyName].usedLocationUnknown}
               onKeyClicked={handleOnKeyboardKeyClick}
-              notUsed={store.keyboardState[keyName].notUsed}
+              notUsed={store.keyboard[keyName].notUsed}
               key={keyName}
-              special={store.keyboardState[keyName].special}
+              special={store.keyboard[keyName].special}
             />
           );
 
-          if (store.keyboardState[keyName].row !== keyboardRowNumber) {
-            keyboardRowNumber = store.keyboardState[keyName].row;
+          if (store.keyboard[keyName].row !== keyboardRowNumber) {
+            keyboardRowNumber = store.keyboard[keyName].row;
 
             return (
               <Fragment key={keyName}>

@@ -1,0 +1,27 @@
+.modal {
+  @apply fixed z-10 left-0 top-0 h-52 w-full overflow-hidden;
+  animation: slideIn 8s ease-in-out;
+  opacity: 0;
+
+  .modal-content {
+    @apply bg-gray-200 m-[10%_auto] p-2 w-fit drop-shadow;
+  }
+
+  @keyframes slideIn {
+    0% {
+      transform: translateY(-100%);
+      opacity: 1;
+    }
+
+    25%,
+    50%,
+    75% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateY(-100%);
+    }
+  }
+}

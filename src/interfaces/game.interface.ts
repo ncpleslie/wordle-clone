@@ -1,5 +1,6 @@
 import GameOptions from "../models/game-options.model";
 import GuessState from "../models/guess-state.model";
+import SubmitResponse from "../models/submit-response.model";
 
 /**
  * Game provides the business logic on the game application.
@@ -24,7 +25,7 @@ export default interface GameInterface {
   /**
    * Submit a answer.
    */
-  submit(): void;
+  submit(): SubmitResponse | void;
 
   /**
    * Undo a guess.
