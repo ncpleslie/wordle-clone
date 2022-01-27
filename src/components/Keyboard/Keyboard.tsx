@@ -5,8 +5,8 @@ import { observer } from "mobx-react-lite";
 import store from "../../store/game-store";
 
 const Keyboard = observer(() => {
-  const handleOnKeyboardKeyClick = (key: string): void => {
-    store.onKeyClicked(key);
+  const handleOnKeyboardKeyClick = async (key: string): Promise<void> => {
+    await store.onKeyClicked(key);
   };
 
   let keyboardRowNumber = 0;

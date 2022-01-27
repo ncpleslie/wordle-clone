@@ -25,7 +25,7 @@ export default interface GameInterface {
   /**
    * Submit a answer.
    */
-  submit(): SubmitResponse | void;
+  submit(): Promise<SubmitResponse | void>;
 
   /**
    * Undo a guess.

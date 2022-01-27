@@ -7,9 +7,9 @@ import HelperUtil from "../utils/helper.util";
 export default class GameService implements GameInterface {
   private row = 0;
 
-  constructor() {
-    this.options = new GameOptions();
-    this.guesses = [...Array(this.options.tries)].map(() => Array(0));
+  constructor(options: GameOptions, guesses: GuessState[][]) {
+    this.options = options;
+    this.guesses = guesses;
   }
 
   public guesses: GuessState[][];
@@ -24,7 +24,7 @@ export default class GameService implements GameInterface {
     this.guesses[this.row].push(new GuessState(guess));
   }
 
-  public submit(): SubmitResponse | void {
+  public async submit(): Promise<SubmitResponse | void> {
     const wordLength = this.options.word.length;
     const guessesLength = this.guesses[this.row].length;
 
@@ -40,7 +40,7 @@ export default class GameService implements GameInterface {
       (acc, curr) => `${acc}${curr.character}`,
       ""
     );
-    if (!HelperUtil.isWord(word, this.options.lang)) {
+    if (!(await HelperUtil.isWord(word, this.options.lang))) {
       for (let i = 0; i < guessesLength; i++) {
         this.guesses[this.row][i].invalid = true;
       }
@@ -83,5 +83,17 @@ export default class GameService implements GameInterface {
 
   public undo(): void {
     this.guesses[this.row]?.pop();
+  }
+
+  public static async createGameService(): Promise<GameService> {
+    const config = await HelperUtil.getConfig();
+    const randomWord = await HelperUtil.getRandomWord(
+      config.wordLength,
+      config.lang
+    );
+    const options = new GameOptions(randomWord, config.tries, config.lang);
+    const guesses = [...Array(options.tries)].map(() => Array(0));
+
+    return new GameService(options, guesses);
   }
 }

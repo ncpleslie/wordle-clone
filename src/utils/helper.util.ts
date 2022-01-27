@@ -3,8 +3,6 @@ import Dictionary, {
   LanguageSpecificDictionary,
 } from "../types/dictionary.interface";
 import KeyState from "../models/key-state.model";
-import config from "./config.json";
-import dictionary from "./dictionary.json";
 
 /**
  * Various helper utilities functions used by the application.
@@ -14,7 +12,8 @@ export default class HelperUtil {
    * Get the current game configuration.
    * @returns {Config} A config entity.
    */
-  public static getConfig(): Config {
+  public static async getConfig(): Promise<Config> {
+    const config = await import("../config.json");
     return new Config(config.wordLength, config.tries, config.lang);
   }
 
@@ -24,7 +23,7 @@ export default class HelperUtil {
    * @returns {KeyState[]} An array of KeyStates.
    */
   public static async getKeyboard(lang: string): Promise<KeyState[]> {
-    const keyboardConfig = await import("./keyboard.json");
+    const keyboardConfig = await import("../keyboard.json");
     const formattedKeyboardConfig: Dictionary<
       {
         character: string;
@@ -49,13 +48,14 @@ export default class HelperUtil {
    * @param lang The language of the word.
    * @returns {string} A random word.
    */
-  public static getRandomWord(length: number, lang: string): string {
-    const dictWithLang = (dictionary as Dictionary<LanguageSpecificDictionary>)[
-      lang
-    ];
-    const dictLength = dictWithLang[length].length;
+  public static async getRandomWord(
+    length: number,
+    lang: string
+  ): Promise<string> {
+    const dictionary = await HelperUtil.getDictionary(lang);
+    const dictLength = dictionary[length].length;
 
-    return dictWithLang[length][Math.floor(Math.random() * (dictLength - 0))];
+    return dictionary[length][Math.floor(Math.random() * (dictLength - 0))];
   }
 
   /**
@@ -64,9 +64,21 @@ export default class HelperUtil {
    * @param lang The language of the word.
    * @returns {boolean} True if the word is in the dictionary.
    */
-  public static isWord(word: string, lang: string): boolean {
-    return (dictionary as Dictionary<LanguageSpecificDictionary>)[lang][
-      word.length.toString()
-    ].includes(word.toLowerCase());
+  public static async isWord(word: string, lang: string): Promise<boolean> {
+    const dictionary = await HelperUtil.getDictionary(lang);
+
+    return dictionary[word.length.toString()].includes(word.toLowerCase());
+  }
+
+  /**
+   * Get a dictionary by language.
+   * @param lang The language of the dictionary.
+   * @returns A language specific dictionary.
+   */
+  private static async getDictionary(
+    lang: string
+  ): Promise<LanguageSpecificDictionary> {
+    const dictionary = await import("../dictionary.json");
+    return (dictionary.default as Dictionary<LanguageSpecificDictionary>)[lang];
   }
 }

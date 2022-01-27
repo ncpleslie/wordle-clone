@@ -14,11 +14,11 @@ class GameStore {
   /**
    * Creates a GameStore MobX store.
    */
-  constructor() {
+  constructor(game: GameInterface) {
     makeAutoObservable(this);
 
     this.guesses = [];
-    this.game = new GameService();
+    this.game = game;
     this.generateKeyboard(this.game.options.lang).then((keyboard) => {
       this.keyboard = keyboard;
     });
@@ -83,9 +83,9 @@ class GameStore {
    * Handle when a key is clicked.
    * @param key The key that was clicked.
    */
-  public onKeyClicked(key: string): void {
+  public async onKeyClicked(key: string): Promise<void> {
     if (key === KeyboardEventKey.Enter) {
-      const submitResponse = this.game.submit();
+      const submitResponse = await this.game.submit();
 
       if (submitResponse?.error) {
         this.displayModal(submitResponse.error);
@@ -206,6 +206,7 @@ class GameStore {
   }
 }
 
-const store = new GameStore();
+const gameService = await GameService.createGameService();
+const store = new GameStore(gameService);
 
 export default store;
