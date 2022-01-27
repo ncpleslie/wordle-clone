@@ -3,5 +3,6 @@ export default interface KeyProps {
   usedLocationUnknown: boolean;
   usedLocationKnown: boolean;
   notUsed: boolean;
+  special: boolean;
   onKeyClicked: (character: string) => void;
 }

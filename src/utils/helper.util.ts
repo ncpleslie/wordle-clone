@@ -24,12 +24,21 @@ export default class HelperUtil {
    */
   public static getKeyboard(lang: string): KeyState[] {
     const keyboardConfig: {
-      [key: string]: { character: string; order: number; row: number }[];
+      [key: string]: {
+        character: string;
+        order: number;
+        row: number;
+        special?: boolean;
+      }[];
     } = KeyboardConfig;
 
     return keyboardConfig[lang].map(
-      (k: { character: string; order: number; row: number }) =>
-        new KeyState(k.character, k.order, k.row)
+      (k: {
+        character: string;
+        order: number;
+        row: number;
+        special?: boolean;
+      }) => new KeyState(k.character, k.order, k.row, k.special)
     );
   }
 

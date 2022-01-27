@@ -4,7 +4,7 @@ import "./CharacterBox.scss";
 const CharacterBox = (props: CharacterBoxProps) => {
   return (
     <div
-      className={`character-box 
+      className={`character-box ${props.className}
       ${props.usedLocationIncorrect ? "incorrect-location" : ""} 
         ${props.usedLocationCorrect ? "correct-location" : ""} 
         ${props.notUsed ? "not-used" : ""}

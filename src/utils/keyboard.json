@@ -19,7 +19,7 @@
     { "character": "J", "order": 6, "row": 1 },
     { "character": "K", "order": 7, "row": 1 },
     { "character": "L", "order": 8, "row": 1 },
-    { "character": "ENTER", "order": 0, "row": 2 },
+    { "character": "ENTER", "order": 0, "row": 2, "special": true },
     { "character": "Z", "order": 1, "row": 2 },
     { "character": "X", "order": 2, "row": 2 },
     { "character": "C", "order": 3, "row": 2 },
@@ -27,6 +27,6 @@
     { "character": "B", "order": 5, "row": 2 },
     { "character": "N", "order": 6, "row": 2 },
     { "character": "M", "order": 7, "row": 2 },
-    { "character": "<", "order": 8, "row": 2 }
+    { "character": "<", "order": 8, "row": 2, "special": true }
   ]
 }

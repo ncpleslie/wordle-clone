@@ -1,5 +1,5 @@
 .key {
-  @apply inline-block bg-gray-300 rounded w-fit h-fit active:bg-gray-500 hover:bg-gray-400;
+  @apply inline-block bg-gray-300 rounded w-8 h-fit active:bg-gray-500 hover:bg-gray-400;
 
   .key__text {
     @apply py-5 px-[10px] font-bold text-xs;
@@ -15,5 +15,9 @@
 
   &.used-and-known {
     @apply bg-green-500 active:bg-green-700 hover:bg-green-600;
+  }
+
+  &.special {
+    @apply w-14;
   }
 }

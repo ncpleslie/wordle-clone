@@ -25,6 +25,7 @@ const Keyboard = observer(() => {
               onKeyClicked={handleOnKeyboardKeyClick}
               notUsed={store.keyboardState[keyName].notUsed}
               key={keyName}
+              special={store.keyboardState[keyName].special}
             />
           );
 

@@ -11,6 +11,7 @@ const Gameboard = observer(() => {
 
         return (
           <CharacterBox
+            className={``}
             key={i}
             character={guess.character}
             usedLocationCorrect={guess.usedLocationCorrect}

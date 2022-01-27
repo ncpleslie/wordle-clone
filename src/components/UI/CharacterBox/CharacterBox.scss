@@ -1,5 +1,5 @@
 .character-box {
-  @apply grid justify-center items-center border-solid border-2 border-black w-[4.2rem] h-[4.2rem];
+  @apply grid justify-center items-center border-solid border-2 border-black w-full h-full aspect-square;
 
   .character-box__text {
     @apply font-black text-4xl;
@@ -18,6 +18,6 @@
   }
 
   &.invalid {
-    @apply transition-opacity ease-in-out border-red-300;
+    @apply border-red-300;
   }
 }

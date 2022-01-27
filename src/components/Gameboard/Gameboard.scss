@@ -1,5 +1,5 @@
 .gameboard {
-  @apply grid gap-1;
+  @apply grid gap-1 w-[80%] sm:w-[50%];
   justify-items: center;
   align-items: center;
 }
