@@ -1,5 +1,7 @@
 # Another Wordle Clone
 
+Try it out at https://ncpleslie.github.io/wordle-clone/
+
 ## Why does this exist?
 
 Because I like the game and wanted to keep playing.
@@ -27,7 +29,7 @@ npm run build
 
 ## FAQ
 
-### Who do I change the word length?
+### How do I change the word length?
 
 `config.json` can be found in `./src/utils/`. From where you can alter the word length and the amount of attempts you can have.
 

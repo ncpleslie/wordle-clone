@@ -1,9 +1,10 @@
 import Config from "../models/config.model";
-import Dictionary from "../types/dictionary.interface";
+import Dictionary, {
+  LanguageSpecificDictionary,
+} from "../types/dictionary.interface";
 import KeyState from "../models/key-state.model";
 import config from "./config.json";
 import dictionary from "./dictionary.json";
-import KeyboardConfig from "./keyboard.json";
 
 /**
  * Various helper utilities functions used by the application.
@@ -22,17 +23,17 @@ export default class HelperUtil {
    * @param lang The language of keyboard to get.
    * @returns {KeyState[]} An array of KeyStates.
    */
-  public static getKeyboard(lang: string): KeyState[] {
-    const keyboardConfig: {
-      [key: string]: {
+  public static async getKeyboard(lang: string): Promise<KeyState[]> {
+    const keyboardConfig = await import("./keyboard.json");
+    const formattedKeyboardConfig: Dictionary<
+      {
         character: string;
         order: number;
         row: number;
         special?: boolean;
-      }[];
-    } = KeyboardConfig;
-
-    return keyboardConfig[lang].map(
+      }[]
+    > = keyboardConfig.default;
+    return formattedKeyboardConfig[lang].map(
       (k: {
         character: string;
         order: number;
@@ -49,7 +50,9 @@ export default class HelperUtil {
    * @returns {string} A random word.
    */
   public static getRandomWord(length: number, lang: string): string {
-    const dictWithLang = (dictionary as Dictionary)[lang];
+    const dictWithLang = (dictionary as Dictionary<LanguageSpecificDictionary>)[
+      lang
+    ];
     const dictLength = dictWithLang[length].length;
 
     return dictWithLang[length][Math.floor(Math.random() * (dictLength - 0))];
@@ -62,8 +65,8 @@ export default class HelperUtil {
    * @returns {boolean} True if the word is in the dictionary.
    */
   public static isWord(word: string, lang: string): boolean {
-    return (dictionary as Dictionary)[lang][word.length.toString()].includes(
-      word.toLowerCase()
-    );
+    return (dictionary as Dictionary<LanguageSpecificDictionary>)[lang][
+      word.length.toString()
+    ].includes(word.toLowerCase());
   }
 }

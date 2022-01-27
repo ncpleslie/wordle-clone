@@ -7,8 +7,8 @@ import HelperUtil from "../utils/helper.util";
 export default class GameService implements GameInterface {
   private row = 0;
 
-  constructor(options: GameOptions) {
-    this.options = options;
+  constructor() {
+    this.options = new GameOptions();
     this.guesses = [...Array(this.options.tries)].map(() => Array(0));
   }
 
@@ -28,7 +28,11 @@ export default class GameService implements GameInterface {
     const wordLength = this.options.word.length;
     const guessesLength = this.guesses[this.row].length;
 
-    if (guessesLength === 0 || guessesLength % wordLength !== 0) {
+    if (
+      guessesLength === 0 ||
+      guessesLength % wordLength !== 0 ||
+      this.row >= this.options.tries
+    ) {
       return;
     }
 
@@ -66,7 +70,15 @@ export default class GameService implements GameInterface {
       this.guesses[this.row][i].notUsed = true;
     }
 
+    if (word === this.options.word) {
+      return SubmitResponse.forWon();
+    }
+
     this.row++;
+
+    if (this.row >= this.options.tries) {
+      return SubmitResponse.forLost(this.options.word);
+    }
   }
 
   public undo(): void {

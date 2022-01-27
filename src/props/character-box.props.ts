@@ -4,5 +4,4 @@ export default interface CharacterBoxProps {
   usedLocationIncorrect: boolean;
   notUsed: boolean;
   invalid: boolean;
-  className: string;
 }

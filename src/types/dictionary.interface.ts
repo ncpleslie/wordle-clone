@@ -1,5 +1,5 @@
-export default interface Dictionary {
-  [key: string]: LanguageSpecificDictionary;
+export default interface Dictionary<T> {
+  [key: string]: T;
 }
 
 export interface LanguageSpecificDictionary {

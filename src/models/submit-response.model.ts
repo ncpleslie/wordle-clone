@@ -3,15 +3,28 @@ export default class SubmitResponse {
   public won?: string;
 
   public static forNotAWord(): SubmitResponse {
-    const response = new SubmitResponse();
-    response.error = "Not a word";
+    return SubmitResponse.createSubmitResponse("Not a word!", true);
+  }
 
-    return response;
+  public static forLost(word: string): SubmitResponse {
+    return SubmitResponse.createSubmitResponse(word, true);
   }
 
   public static forWon(): SubmitResponse {
+    return SubmitResponse.createSubmitResponse("You win!", false);
+  }
+
+  private static createSubmitResponse(
+    word: string,
+    forError: boolean
+  ): SubmitResponse {
     const response = new SubmitResponse();
-    response.won = "You win!";
+
+    if (forError) {
+      response.error = word;
+    } else {
+      response.won = "You win!";
+    }
 
     return response;
   }

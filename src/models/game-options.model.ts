@@ -1,8 +1,14 @@
+import HelperUtil from "../utils/helper.util";
+
 export default class GameOptions {
-  constructor(word: string, tries = 6, lang = "en-US") {
+  constructor() {
+    const config = HelperUtil.getConfig();
+    const word = HelperUtil.getRandomWord(config.wordLength, config.lang);
+    console.log("Word is: ", word);
+
     this.word = word.toUpperCase();
-    this.tries = tries;
-    this.lang = lang;
+    this.tries = config.tries;
+    this.lang = config.lang;
   }
 
   public word: string;

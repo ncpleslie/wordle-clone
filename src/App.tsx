@@ -3,7 +3,7 @@ import Gameboard from "./components/Gameboard/Gameboard";
 import Keyboard from "./components/Keyboard/Keyboard";
 import Modal from "./components/UI/Modal/Modal";
 
-function App() {
+const App = () => {
   return (
     <>
       <div className="App">
@@ -16,6 +16,6 @@ function App() {
       <Modal />
     </>
   );
-}
+};
 
 export default App;

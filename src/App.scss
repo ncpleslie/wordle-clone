@@ -1,8 +1,8 @@
 .App {
-  @apply grid justify-center h-full;
+  @apply h-full;
 
   .game {
-    @apply flex flex-col justify-between items-center my-10 h-screen;
+    @apply flex flex-col justify-between items-center my-10;
     height: calc(100vh - 5rem);
   }
 }

@@ -1,10 +1,10 @@
 import { makeAutoObservable } from "mobx";
 import { KeyboardEventKey } from "../enums/keyboard-event-key.enum";
 import GameInterface from "../interfaces/game.interface";
-import GameOptions from "../models/game-options.model";
 import GuessState from "../models/guess-state.model";
 import KeyState from "../models/key-state.model";
 import GameService from "../services/game.service";
+import Dictionary from "../types/dictionary.interface";
 import HelperUtil from "../utils/helper.util";
 
 /**
@@ -13,14 +13,15 @@ import HelperUtil from "../utils/helper.util";
 class GameStore {
   /**
    * Creates a GameStore MobX store.
-   * @param game The game's business logic.
    */
-  constructor(game: GameInterface) {
+  constructor() {
     makeAutoObservable(this);
 
-    this.keyboard = this.generateKeyboard(game.options.lang);
     this.guesses = [];
-    this.game = game;
+    this.game = new GameService();
+    this.generateKeyboard(this.game.options.lang).then((keyboard) => {
+      this.keyboard = keyboard;
+    });
   }
 
   /**
@@ -36,7 +37,7 @@ class GameStore {
   /**
    * The state of the keyboard.
    */
-  public keyboard: { [key: string]: KeyState };
+  public keyboard: Dictionary<KeyState> | undefined;
 
   /**
    * The message to show in a modal.
@@ -90,6 +91,10 @@ class GameStore {
         this.displayModal(submitResponse.error);
       }
 
+      if (submitResponse?.won) {
+        this.displayModal(submitResponse.won);
+      }
+
       this.updateGuessesState();
 
       this.guesses.forEach((guess: GuessState) => {
@@ -127,10 +132,10 @@ class GameStore {
    * @param lang The language for the keyboard.
    * @returns A object of KeyStates. The key of the object is the character of key.
    */
-  private generateKeyboard(lang: string): { [key: string]: KeyState } {
-    const keyboard = HelperUtil.getKeyboard(lang);
+  private async generateKeyboard(lang: string): Promise<Dictionary<KeyState>> {
+    const keyboard = await HelperUtil.getKeyboard(lang);
 
-    return keyboard?.reduce<{ [key: string]: KeyState }>((acc, curr) => {
+    return keyboard?.reduce<Dictionary<KeyState>>((acc, curr) => {
       acc[curr.character.toUpperCase()] = curr;
 
       return acc;
@@ -142,6 +147,10 @@ class GameStore {
    * @param key The key to set.
    */
   private setKeyLocationKnown(key: string): void {
+    if (!this.keyboard) {
+      return;
+    }
+
     this.keyboard[key].usedLocationKnown = true;
   }
 
@@ -150,6 +159,10 @@ class GameStore {
    * @param key The key to set.
    */
   private setKeyLocationUnknown(key: string): void {
+    if (!this.keyboard) {
+      return;
+    }
+
     this.keyboard[key].usedLocationUnknown = true;
   }
 
@@ -158,6 +171,10 @@ class GameStore {
    * @param key The key to set.
    */
   private setKeyNotUsed(key: string): void {
+    if (!this.keyboard) {
+      return;
+    }
+
     this.keyboard[key].notUsed = true;
   }
 
@@ -189,12 +206,6 @@ class GameStore {
   }
 }
 
-const config = HelperUtil.getConfig();
-const word = HelperUtil.getRandomWord(config.wordLength, config.lang);
-console.log("Word is: ", word);
-const gameOptions = new GameOptions(word, config.tries, config.lang);
-const gameService = new GameService(gameOptions);
-
-const store = new GameStore(gameService);
+const store = new GameStore();
 
 export default store;

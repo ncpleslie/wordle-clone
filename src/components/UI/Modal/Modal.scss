@@ -1,10 +1,10 @@
 .modal {
   @apply fixed z-10 left-0 top-0 h-52 w-full overflow-hidden;
-  animation: slideIn 8s ease-in-out;
+  animation: slideIn 4s ease-in-out;
   opacity: 0;
 
   .modal-content {
-    @apply bg-gray-200 m-[10%_auto] p-2 w-fit drop-shadow;
+    @apply bg-gray-200 m-[10%_auto] p-2 w-fit drop-shadow rounded;
   }
 
   @keyframes slideIn {
@@ -13,9 +13,8 @@
       opacity: 1;
     }
 
-    25%,
-    50%,
-    75% {
+    5%,
+    95% {
       transform: translateY(0);
       opacity: 1;
     }
