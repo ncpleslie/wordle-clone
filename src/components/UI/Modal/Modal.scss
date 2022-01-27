@@ -4,7 +4,7 @@
   opacity: 0;
 
   .modal-content {
-    @apply bg-gray-200 m-[10%_auto] p-2 w-fit drop-shadow rounded;
+    @apply bg-gray-200 m-[8.5%_auto] p-2 w-fit drop-shadow rounded;
   }
 
   @keyframes slideIn {
