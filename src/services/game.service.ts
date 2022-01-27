@@ -82,6 +82,6 @@ export default class GameService implements GameInterface {
   }
 
   public undo(): void {
-    this.guesses[this.row].pop();
+    this.guesses[this.row]?.pop();
   }
 }
