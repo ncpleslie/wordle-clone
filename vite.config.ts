@@ -5,4 +5,8 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   base: "/wordle-clone/",
   plugins: [react()],
+  build: {
+    minify: "esbuild",
+    target: "esnext",
+  },
 });
