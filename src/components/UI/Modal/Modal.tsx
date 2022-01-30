@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import { createPortal } from "react-dom";
 import "./Modal.scss";
 import store from "../../../store/game-store";
+import DomConstant from "../../../constants/dom.constants";
 
 const Modal = observer(() => {
   const modal = (
@@ -19,7 +20,7 @@ const Modal = observer(() => {
     <>
       {createPortal(
         modal,
-        document.getElementById("overlay-root") as HTMLElement
+        document.getElementById(DomConstant.modalElement) as HTMLElement
       )}
     </>
   );

@@ -9,6 +9,23 @@ import KeyState from "../models/key-state.model";
  */
 export default class HelperUtil {
   /**
+   * Generates a keyboard in the provided language.
+   * @param lang The language for the keyboard.
+   * @returns A object of KeyStates. The key of the object is the character of key.
+   */
+  public static async generateKeyboard(
+    lang: string
+  ): Promise<Dictionary<KeyState>> {
+    const keyboard = await HelperUtil.getKeyboard(lang);
+
+    return keyboard?.reduce<Dictionary<KeyState>>((acc, curr) => {
+      acc[curr.character.toUpperCase()] = curr;
+
+      return acc;
+    }, {});
+  }
+
+  /**
    * Get the current game configuration.
    * @returns {Config} A config entity.
    */

@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { KeyboardEventKey } from "../enums/keyboard-event-key.enum";
-import GameInterface from "../interfaces/game.interface";
+import IGameService from "../interfaces/game.interface";
 import GuessState from "../models/guess-state.model";
 import KeyState from "../models/key-state.model";
 import GameService from "../services/game.service";
@@ -14,20 +14,18 @@ class GameStore {
   /**
    * Creates a GameStore MobX store.
    */
-  constructor(game: GameInterface) {
+  constructor(game: IGameService, keyboard: Dictionary<KeyState>) {
     makeAutoObservable(this);
 
     this.guesses = [];
     this.game = game;
-    this.generateKeyboard(this.game.options.lang).then((keyboard) => {
-      this.keyboard = keyboard;
-    });
+    this.keyboard = keyboard;
   }
 
   /**
    * The game's business logic.
    */
-  public game: GameInterface;
+  public game: IGameService;
 
   /**
    * An array of currently added guesses.
@@ -128,21 +126,6 @@ class GameStore {
   }
 
   /**
-   * Generates a keyboard in the provided language.
-   * @param lang The language for the keyboard.
-   * @returns A object of KeyStates. The key of the object is the character of key.
-   */
-  private async generateKeyboard(lang: string): Promise<Dictionary<KeyState>> {
-    const keyboard = await HelperUtil.getKeyboard(lang);
-
-    return keyboard?.reduce<Dictionary<KeyState>>((acc, curr) => {
-      acc[curr.character.toUpperCase()] = curr;
-
-      return acc;
-    }, {});
-  }
-
-  /**
    * Sets a key to a "usedLocationKnown" state.
    * @param key The key to set.
    */
@@ -207,6 +190,7 @@ class GameStore {
 }
 
 const gameService = await GameService.createGameService();
-const store = new GameStore(gameService);
+const keyboard = await HelperUtil.generateKeyboard(gameService.options.lang);
+const store = new GameStore(gameService, keyboard);
 
 export default store;

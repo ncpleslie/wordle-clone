@@ -1,10 +1,10 @@
-import GameInterface from "../interfaces/game.interface";
+import IGameService from "../interfaces/game.interface";
 import GameOptions from "../models/game-options.model";
 import GuessState from "../models/guess-state.model";
 import SubmitResponse from "../models/submit-response.model";
 import HelperUtil from "../utils/helper.util";
 
-export default class GameService implements GameInterface {
+export default class GameService implements IGameService {
   private row = 0;
 
   constructor(options: GameOptions, guesses: GuessState[][]) {

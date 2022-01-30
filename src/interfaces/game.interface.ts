@@ -5,7 +5,7 @@ import SubmitResponse from "../models/submit-response.model";
 /**
  * Game provides the business logic on the game application.
  */
-export default interface GameInterface {
+export default interface IGameService {
   /**
    * An entity containing options and configurations for the game.
    */

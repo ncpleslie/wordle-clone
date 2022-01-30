@@ -1,4 +1,4 @@
-import "./App.scss";
+import classes from "./App.module.scss";
 import Gameboard from "./components/Gameboard/Gameboard";
 import Keyboard from "./components/Keyboard/Keyboard";
 import Modal from "./components/UI/Modal/Modal";
@@ -6,8 +6,8 @@ import Modal from "./components/UI/Modal/Modal";
 const App = () => {
   return (
     <>
-      <div className="App">
-        <div className="game">
+      <div className={classes.app}>
+        <div className={classes["game"]}>
           <Gameboard />
           <Keyboard />
         </div>
