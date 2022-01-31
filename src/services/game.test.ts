@@ -31,7 +31,7 @@ describe(GameService, () => {
     expect(gameService.guesses[0][0].character).toBe(guessToAdd);
   });
 
-  it("It can not add a more guesses to a row than the length of the word", () => {
+  it("It can not add more guesses to a row than the length of the word", () => {
     const guessToAdd = "*";
     const guessesToAdd = [...guessToAdd.repeat(options.word.length)];
 
