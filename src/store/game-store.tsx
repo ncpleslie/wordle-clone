@@ -11,6 +11,8 @@ import HelperUtil from "../utils/helper.util";
  * A MobX store of game state.
  */
 class GameStore {
+  private timer: NodeJS.Timeout | undefined;
+
   /**
    * Creates a GameStore MobX store.
    */
@@ -38,14 +40,19 @@ class GameStore {
   public keyboard: Dictionary<KeyState> | undefined;
 
   /**
-   * The message to show in a modal.
+   * The toast state.
    */
-  public modalMessage = "";
+  public showToast = false;
 
   /**
-   * The modal state.
+   * The message to show in a toast.
    */
-  public showModal = false;
+  public toastMessage = "";
+
+  /**
+   * The timeout of the toast message.
+   */
+  public toastTimeoutInMs = 2500;
 
   /**
    * Get a guess from the array of guesses, by index.
@@ -86,11 +93,11 @@ class GameStore {
       const submitResponse = await this.game.submit();
 
       if (submitResponse?.error) {
-        this.displayModal(submitResponse.error);
+        this.displayToast(submitResponse.error);
       }
 
       if (submitResponse?.won) {
-        this.displayModal(submitResponse.won);
+        this.displayToast(submitResponse.won);
       }
 
       this.updateGuessesState();
@@ -162,16 +169,29 @@ class GameStore {
   }
 
   /**
-   * Shows a modal.
+   * Shows a toast.
    * @param message The message to display.
    */
-  private displayModal(message: string, timeoutInMs = 8000): void {
-    this.showModal = true;
-    this.modalMessage = message;
-
-    if (this.showModal) {
-      setTimeout(() => (this.showModal = false), timeoutInMs);
+  private displayToast(message: string, timeoutInMs = 2500): void {
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = undefined;
     }
+
+    this.showToast = true;
+    this.toastMessage = message;
+    this.toastTimeoutInMs = timeoutInMs;
+
+    if (this.showToast) {
+      this.timer = setTimeout(() => this.hideToast(), timeoutInMs);
+    }
+  }
+
+  /**
+   * Hide the toast notification.
+   */
+  private hideToast(): void {
+    this.showToast = false;
   }
 
   /**

@@ -1,7 +1,7 @@
 import classes from "./App.module.scss";
 import Gameboard from "./components/Gameboard/Gameboard";
 import Keyboard from "./components/Keyboard/Keyboard";
-import Modal from "./components/UI/Modal/Modal";
+import Toast from "./components/UI/Toast/Toast";
 
 const App = () => {
   return (
@@ -13,7 +13,7 @@ const App = () => {
         </div>
       </div>
 
-      <Modal />
+      <Toast />
     </>
   );
 };
