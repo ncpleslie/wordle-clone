@@ -37,7 +37,7 @@ class GameStore {
   /**
    * The state of the keyboard.
    */
-  public keyboard: Dictionary<KeyState> | undefined;
+  public keyboard: Dictionary<KeyState>;
 
   /**
    * The toast state.
