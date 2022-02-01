@@ -31,6 +31,7 @@ export default class HelperUtil {
    */
   public static async getConfig(): Promise<Config> {
     const config = await import("../config.json");
+
     return new Config(config.wordLength, config.tries, config.lang);
   }
 
@@ -49,6 +50,7 @@ export default class HelperUtil {
         special?: boolean;
       }[]
     > = keyboardConfig.default;
+
     return formattedKeyboardConfig[lang].map(
       (k: {
         character: string;
@@ -72,7 +74,23 @@ export default class HelperUtil {
     const dictionary = await HelperUtil.getDictionary(lang);
     const dictLength = dictionary[length].length;
 
-    return dictionary[length][Math.floor(Math.random() * (dictLength - 0))];
+    const word =
+      dictionary[length][Math.floor(Math.random() * (dictLength - 0))];
+
+    // Check to make sure the word doesn't include any unwanted characters.
+    // If it does, retry getting a word.
+    //
+    // ^: Assert position at the beginning of the string
+    // [a-z]: Match a single character present in the list below:
+    // +: Between one and unlimited times, as many as possible, giving back as needed (greedy)
+    // a-z: A character in the range between "a" and "z"
+    // $: Assert position at the end of the string (or before the line break at the end of the string, if any)
+    // i: Case-insensitive flag
+    if (!/^[a-z]+$/i.test(word)) {
+      return HelperUtil.getRandomWord(length, lang);
+    }
+
+    return word;
   }
 
   /**
@@ -96,6 +114,7 @@ export default class HelperUtil {
     lang: string
   ): Promise<LanguageSpecificDictionary> {
     const dictionary = await import("../dictionary.json");
+
     return (dictionary.default as Dictionary<LanguageSpecificDictionary>)[lang];
   }
 }

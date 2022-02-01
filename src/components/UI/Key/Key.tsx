@@ -1,7 +1,8 @@
 import KeyProps from "../../../props/key.props";
 import "./Key.scss";
+import { memo } from "react";
 
-const Key = (props: KeyProps) => {
+const Key = memo((props: KeyProps) => {
   const handleOnClick = (): void => {
     props.onKeyClicked(props.character);
   };
@@ -16,6 +17,6 @@ const Key = (props: KeyProps) => {
       <p className="key__text">{props.character.toUpperCase()}</p>
     </button>
   );
-};
+});
 
 export default Key;

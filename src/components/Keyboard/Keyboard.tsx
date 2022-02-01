@@ -3,17 +3,17 @@ import Key from "../UI/Key/Key";
 import "./Keyboard.scss";
 import { observer } from "mobx-react-lite";
 import store from "../../store/game-store";
+import { useCallback } from "react";
 
 const Keyboard = observer(() => {
-  const handleOnKeyboardKeyClick = async (key: string): Promise<void> => {
-    await store.onKeyClicked(key);
-  };
+  const handleOnKeyboardKeyClick = useCallback(
+    async (key: string): Promise<void> => {
+      await store.onKeyClicked(key);
+    },
+    [store.onKeyClicked]
+  );
 
   let keyboardRowNumber = 0;
-
-  if (!store.keyboard) {
-    return <></>;
-  }
 
   return (
     <div>
@@ -22,17 +22,17 @@ const Keyboard = observer(() => {
           const key = (
             <Key
               character={keyName}
-              usedLocationKnown={store.keyboard![keyName].usedLocationKnown}
-              usedLocationUnknown={store.keyboard![keyName].usedLocationUnknown}
+              usedLocationKnown={store.keyboard[keyName].usedLocationKnown}
+              usedLocationUnknown={store.keyboard[keyName].usedLocationUnknown}
               onKeyClicked={handleOnKeyboardKeyClick}
-              notUsed={store.keyboard![keyName].notUsed}
+              notUsed={store.keyboard[keyName].notUsed}
               key={keyName}
-              special={store.keyboard![keyName].special}
+              special={store.keyboard[keyName].special}
             />
           );
 
-          if (store.keyboard![keyName].row !== keyboardRowNumber) {
-            keyboardRowNumber = store.keyboard![keyName].row;
+          if (store.keyboard[keyName].row !== keyboardRowNumber) {
+            keyboardRowNumber = store.keyboard[keyName].row;
 
             return (
               <Fragment key={keyName}>

@@ -1,7 +1,8 @@
 import CharacterBoxProps from "../../../props/character-box.props";
 import "./CharacterBox.scss";
+import { memo } from "react";
 
-const CharacterBox = (props: CharacterBoxProps) => {
+const CharacterBox = memo((props: CharacterBoxProps) => {
   return (
     <div
       className={`character-box 
@@ -14,6 +15,6 @@ const CharacterBox = (props: CharacterBoxProps) => {
       <p className="character-box__text">{props.character}</p>
     </div>
   );
-};
+});
 
 export default CharacterBox;
