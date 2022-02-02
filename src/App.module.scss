@@ -1,8 +1,6 @@
 .app {
-  @apply h-screen;
-
   .game {
     @apply flex flex-col justify-between items-center my-10;
-    height: calc(100vh - 5rem);
+    height: calc(100vh - 8rem);
   }
 }

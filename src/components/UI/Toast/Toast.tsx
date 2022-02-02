@@ -1,13 +1,19 @@
 import { observer } from "mobx-react-lite";
 import { createPortal } from "react-dom";
 import "./Toast.scss";
-import store from "../../../store/game-store";
 import DomConstant from "../../../constants/dom.constants";
 import { CSSTransition } from "react-transition-group";
-import { useRef } from "react";
+import { useContext, useRef } from "react";
+import { GameContext } from "../../../store/game-context";
 
 const Toast = observer(() => {
-  const ref = useRef();
+  const store = useContext(GameContext);
+
+  if (!store) {
+    return <></>;
+  }
+
+  const ref = useRef(null);
 
   const toast = (
     <CSSTransition

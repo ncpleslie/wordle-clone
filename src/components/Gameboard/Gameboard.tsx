@@ -1,9 +1,16 @@
 import "./Gameboard.scss";
 import CharacterBox from "../UI/CharacterBox/CharacterBox";
 import { observer } from "mobx-react-lite";
-import store from "../../store/game-store";
+import { useContext } from "react";
+import { GameContext } from "../../store/game-context";
 
 const Gameboard = observer(() => {
+  const store = useContext(GameContext);
+
+  if (!store) {
+    return <></>;
+  }
+
   return (
     <div className={`gameboard grid-cols-${store.getWordLength()}`}>
       {[...Array(store.getWordLength() * store.getTotalTries())].map((_, i) => {

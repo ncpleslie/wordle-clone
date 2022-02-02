@@ -38,3 +38,8 @@ npm run build
 You'll need to find a dictionary for your language. Follow the structure of the `dictionary.json` file found in `./src/utils`
 
 The keyboard can be updated in the same directory as `dictionary.json`. This is located in `keyboard.json`.
+
+### Hey, this is really overkill for a basic Wordle game
+
+I know. I've deliberately over-engineered this to leverage as many of the features of React as a possible. This is all about learning.
+Consider this an enterprise-level implementation of Wordle. Perhaps you could use this as the base for your next application?

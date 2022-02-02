@@ -3,6 +3,7 @@ import Dictionary, {
   LanguageSpecificDictionary,
 } from "../types/dictionary.interface";
 import KeyState from "../models/key-state.model";
+import DomConstant from "../constants/dom.constants";
 
 /**
  * Various helper utilities functions used by the application.
@@ -103,6 +104,13 @@ export default class HelperUtil {
     const dictionary = await HelperUtil.getDictionary(lang);
 
     return dictionary[word.length.toString()].includes(word.toLowerCase());
+  }
+
+  /**
+   * Removes the loading indicator.
+   */
+  public static removeLoadingIndicator(): void {
+    document.getElementById(DomConstant.loadingElement)?.remove();
   }
 
   /**

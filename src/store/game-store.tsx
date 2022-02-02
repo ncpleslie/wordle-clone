@@ -10,7 +10,7 @@ import HelperUtil from "../utils/helper.util";
 /**
  * A MobX store of game state.
  */
-class GameStore {
+export default class GameStore {
   private timer: NodeJS.Timeout | undefined;
 
   /**
@@ -208,9 +208,3 @@ class GameStore {
     this.keyboard = { ...this.keyboard };
   }
 }
-
-const gameService = await GameService.createGameService();
-const keyboard = await HelperUtil.generateKeyboard(gameService.options.lang);
-const store = new GameStore(gameService, keyboard);
-
-export default store;

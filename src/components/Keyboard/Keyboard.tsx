@@ -1,11 +1,17 @@
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import Key from "../UI/Key/Key";
 import "./Keyboard.scss";
 import { observer } from "mobx-react-lite";
-import store from "../../store/game-store";
 import { useCallback } from "react";
+import { GameContext } from "../../store/game-context";
 
 const Keyboard = observer(() => {
+  const store = useContext(GameContext);
+
+  if (!store) {
+    return <></>;
+  }
+
   const handleOnKeyboardKeyClick = useCallback(
     async (key: string): Promise<void> => {
       await store.onKeyClicked(key);
