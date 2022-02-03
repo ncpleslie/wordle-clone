@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from "react";
 import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
-import DomConstant from "../constants/dom.constants";
 import ChildrenProps from "../props/children.props";
 import GameService from "../services/game.service";
 import HelperUtil from "../utils/helper.util";
