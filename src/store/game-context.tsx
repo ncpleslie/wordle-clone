@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
 import ChildrenProps from "../props/children.props";
 import GameService from "../services/game.service";

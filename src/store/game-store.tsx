@@ -1,8 +1,11 @@
 import { makeAutoObservable } from "mobx";
 import { KeyboardEventKey } from "../enums/keyboard-event-key.enum";
 import IGameService from "../interfaces/game.interface";
+import Config from "../models/config.model";
+import GameOptions from "../models/game-options.model";
 import GuessState from "../models/guess-state.model";
 import KeyState from "../models/key-state.model";
+import SettingsConfig from "../models/settings-config.model";
 import GameService from "../services/game.service";
 import Dictionary from "../types/dictionary.interface";
 import HelperUtil from "../utils/helper.util";
@@ -133,6 +136,84 @@ export default class GameStore {
   }
 
   /**
+   * Gets the configuration for the settings menu.
+   * @returns The settings configuration.
+   */
+  public async getSettings(): Promise<SettingsConfig> {
+    const config = await HelperUtil.getSettingsConfig();
+    config.currentWordLength = this.game.options.word.length.toString();
+    config.currentTries = this.game.options.tries.toString();
+    config.currentLang = this.game.options.lang;
+
+    return config;
+  }
+
+  /**
+   * Update the current language.
+   * @param lang The new language.
+   */
+  public async setLang(lang: string): Promise<void> {
+    const config = new Config(
+      this.game.options.word.length,
+      this.game.options.tries,
+      lang
+    );
+    await this.updateGameConfig(config);
+  }
+
+  /**
+   * Update the number of number of guesses the user can make.
+   * @param tries The new tries value.
+   */
+  public async setTries(tries: number): Promise<void> {
+    const config = new Config(
+      this.game.options.word.length,
+      tries,
+      this.game.options.lang
+    );
+    await this.updateGameConfig(config);
+  }
+
+  /**
+   * Update the word length.
+   * @param wordLength The new word length.
+   */
+  public async setWordLength(wordLength: number): Promise<void> {
+    const config = new Config(
+      wordLength,
+      this.game.options.tries,
+      this.game.options.lang
+    );
+    await this.updateGameConfig(config);
+  }
+
+  /**
+   * Shows a toast.
+   * @param message The message to display.
+   */
+  private displayToast(message: string, timeoutInMs = 2500): void {
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = undefined;
+    }
+
+    this.showToast = true;
+    this.toastMessage = message;
+    this.toastTimeoutInMs = timeoutInMs;
+
+    if (this.showToast) {
+      this.timer = setTimeout(() => this.hideToast(), timeoutInMs);
+    }
+  }
+
+  /**
+   * Hide the toast notification.
+   */
+  private hideToast(): void {
+    this.showToast = false;
+  }
+
+  /**
    * Sets a key to a "usedLocationKnown" state.
    * @param key The key to set.
    */
@@ -169,29 +250,13 @@ export default class GameStore {
   }
 
   /**
-   * Shows a toast.
-   * @param message The message to display.
+   * Updates the game's configuration.
+   * @param config The new config.
    */
-  private displayToast(message: string, timeoutInMs = 2500): void {
-    if (this.timer) {
-      clearTimeout(this.timer);
-      this.timer = undefined;
-    }
-
-    this.showToast = true;
-    this.toastMessage = message;
-    this.toastTimeoutInMs = timeoutInMs;
-
-    if (this.showToast) {
-      this.timer = setTimeout(() => this.hideToast(), timeoutInMs);
-    }
-  }
-
-  /**
-   * Hide the toast notification.
-   */
-  private hideToast(): void {
-    this.showToast = false;
+  private async updateGameConfig(config: Config): Promise<void> {
+    const game = await GameService.createGameService(config);
+    this.game = game;
+    this.updateGuessesState();
   }
 
   /**

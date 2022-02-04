@@ -4,6 +4,7 @@ import Dictionary, {
 } from "../types/dictionary.interface";
 import KeyState from "../models/key-state.model";
 import DomConstant from "../constants/dom.constants";
+import SettingsConfig from "../models/settings-config.model";
 
 /**
  * Various helper utilities functions used by the application.
@@ -33,7 +34,12 @@ export default class HelperUtil {
   public static async getConfig(): Promise<Config> {
     const config = await import("../config.json");
 
-    return new Config(config.wordLength, config.tries, config.lang);
+    return new Config(
+      config.wordLength,
+      config.tries,
+      config.supportedLangs[0],
+      config.supportedLangs
+    );
   }
 
   /**
@@ -92,6 +98,26 @@ export default class HelperUtil {
     }
 
     return word;
+  }
+
+  /**
+   * Get a configuration entity of different values for the settings menu.
+   * @returns A settings config.
+   */
+  public static async getSettingsConfig(): Promise<SettingsConfig> {
+    const config = await HelperUtil.getConfig();
+
+    if (!config.lang) {
+      throw new Error("Unable to determine language");
+    }
+
+    const dictionary = await HelperUtil.getDictionary(config.lang);
+    const tries = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+    const languages = config.supportedLangs
+      ? config.supportedLangs
+      : [config.lang];
+
+    return new SettingsConfig(Object.keys(dictionary), tries, languages);
   }
 
   /**

@@ -1,4 +1,5 @@
 import IGameService from "../interfaces/game.interface";
+import Config from "../models/config.model";
 import GameOptions from "../models/game-options.model";
 import GuessState from "../models/guess-state.model";
 import SubmitResponse from "../models/submit-response.model";
@@ -85,13 +86,29 @@ export default class GameService implements IGameService {
     this.guesses[this.row]?.pop();
   }
 
-  public static async createGameService(): Promise<GameService> {
-    const config = await HelperUtil.getConfig();
+  /**
+   * Creates a GameService instance.
+   * @param customConfig An optional custom config.
+   * @returns Returns an instance of the game service.
+   */
+  public static async createGameService(
+    customConfig?: Config
+  ): Promise<IGameService> {
+    let config = customConfig;
+
+    if (!customConfig) {
+      config = await HelperUtil.getConfig();
+    }
+
     const randomWord = await HelperUtil.getRandomWord(
-      config.wordLength,
-      config.lang
+      config?.wordLength || 5,
+      config?.lang || "en-US"
     );
-    const options = new GameOptions(randomWord, config.tries, config.lang);
+    const options = new GameOptions(
+      randomWord,
+      config?.tries || 6,
+      config?.lang || "en-US"
+    );
     const guesses = [...Array(options.tries)].map(() => Array(0));
 
     return new GameService(options, guesses);
