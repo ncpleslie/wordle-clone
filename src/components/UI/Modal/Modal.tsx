@@ -1,15 +1,14 @@
-import ChildrenProps from "../../../props/children.props";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
 import { createPortal } from "react-dom";
 import DomConstant from "../../../constants/dom.constants";
 import useCreateDomElementForPortal from "../../../hooks/dom-element-for-portal.hook";
 import CloseIcon from "../Icon/CloseIcon";
 import ModalProps from "../../../props/modal.props";
+import Portal from "../Portal/Portal";
 
-const Modal = (props: ChildrenProps & ModalProps) => {
+const Modal: FC<ModalProps> = (props) => {
   const navigate = useNavigate();
-  const isLoaded = useCreateDomElementForPortal(DomConstant.modalElement);
 
   const handleOnCloseClicked = () => {
     navigate(-1);
@@ -49,17 +48,10 @@ const Modal = (props: ChildrenProps & ModalProps) => {
     </div>
   );
 
-  if (!isLoaded) {
-    return <></>;
-  }
-
   return (
-    <>
-      {createPortal(
-        modal,
-        document.getElementById(DomConstant.modalElement) as HTMLElement
-      )}
-    </>
+    <Portal id={DomConstant.modalElement} force>
+      {modal}
+    </Portal>
   );
 };
 

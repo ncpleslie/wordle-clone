@@ -5,6 +5,7 @@ import DomConstant from "../../../constants/dom.constants";
 import { CSSTransition } from "react-transition-group";
 import { useContext, useRef } from "react";
 import { GameContext } from "../../../store/game-context";
+import Portal from "../Portal/Portal";
 
 const Toast = observer(() => {
   const store = useContext(GameContext);
@@ -33,12 +34,9 @@ const Toast = observer(() => {
   );
 
   return (
-    <>
-      {createPortal(
-        toast,
-        document.getElementById(DomConstant.toastElement) as HTMLElement
-      )}
-    </>
+    <Portal id={DomConstant.toastElement} force>
+      {toast}
+    </Portal>
   );
 });
 

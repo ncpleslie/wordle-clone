@@ -1,9 +1,9 @@
 import CharacterBoxProps from "../../../props/character-box.props";
 import "./CharacterBox.scss";
-import { memo } from "react";
+import { FC, memo } from "react";
 import classNames from "classnames";
 
-const CharacterBox = memo((props: CharacterBoxProps) => {
+const CharacterBox: FC<CharacterBoxProps> = memo((props) => {
   const computedStyle = classNames("character-box", {
     "incorrect-location": props.usedLocationIncorrect,
     "correct-location": props.usedLocationCorrect,

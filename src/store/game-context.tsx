@@ -1,14 +1,12 @@
-import { createContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { createContext, FC, useEffect, useState } from "react";
 import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
-import ChildrenProps from "../props/children.props";
 import GameService from "../services/game.service";
 import HelperUtil from "../utils/helper.util";
 import GameStore from "./game-store";
 
 export const GameContext = createContext<GameStore | null>(null);
 
-const GameContextProvider = (props: ChildrenProps) => {
+const GameContextProvider: FC = (props) => {
   const [error, setError] = useState<Error | null>(null);
   const [store, setStore] = useState<GameStore | null>(null);
 

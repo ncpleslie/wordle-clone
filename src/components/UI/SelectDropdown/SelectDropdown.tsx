@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import useUniqueId from "../../../hooks/unique-id.hook";
 import SelectDropdownProps from "../../../props/select-dropdown.props";
 
-const SelectDropdown = (props: SelectDropdownProps) => {
+const SelectDropdown: FC<SelectDropdownProps> = (props) => {
   const [dropdownValue, setDropdownValue] = useState(props.defaultValue);
   const id = `dropdown-${useUniqueId()}`;
 

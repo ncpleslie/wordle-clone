@@ -21,7 +21,6 @@ const Settings = observer(() => {
 
       if (settingsConfig) {
         setSettingsConfig(settingsConfig);
-        console.log(settingsConfig);
       }
 
       setIsLoading(false);

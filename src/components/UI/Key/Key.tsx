@@ -1,9 +1,9 @@
 import KeyProps from "../../../props/key.props";
 import "./Key.scss";
-import { memo } from "react";
+import { FC, memo } from "react";
 import classNames from "classnames";
 
-const Key = memo((props: KeyProps) => {
+const Key: FC<KeyProps> = memo((props) => {
   const handleOnClick = (): void => {
     props.onKeyClicked(props.character);
   };
