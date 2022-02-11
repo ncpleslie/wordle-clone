@@ -254,8 +254,8 @@ export default class GameStore {
    * @param config The new config.
    */
   private async updateGameConfig(config: Config): Promise<void> {
-    const game = await GameService.createGameService(config);
-    this.game = game;
+    this.game = await GameService.createGameService(config);
+    this.keyboard = await HelperUtil.generateKeyboard(this.game.options.lang);
     this.updateGuessesState();
   }
 

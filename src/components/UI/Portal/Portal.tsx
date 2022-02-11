@@ -8,7 +8,6 @@ const Portal: FC<{ id: string; force?: boolean }> = ({
   force,
 }) => {
   if (force) {
-    console.log("ff");
     const isLoaded = useCreateDomElementForPortal(id);
 
     if (!isLoaded) {
